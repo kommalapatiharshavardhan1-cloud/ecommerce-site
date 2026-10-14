@@ -1,0 +1,15 @@
+target/
+*.class
+*.log
+.idea/
+.vscode/
+*.iml
+.DS_Store
+.env
+.env.local
+.env.*.local
+.neon
+node_modules/
+npm-debug.log*.neon
+node_modules/
+.env.local

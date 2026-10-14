@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#f1f5f9"/>
+  <g fill="#94a3b8" font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="200" y="150" font-size="28">📦</text>
+    <text x="200" y="190" font-size="14">Product Image</text>
+  </g>
+</svg>

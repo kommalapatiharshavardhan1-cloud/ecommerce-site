@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - ShopEase</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="d-flex">
+  <aside class="admin-sidebar p-3" style="width:220px">
+    <h4 class="text-white mb-3"><i class="bi bi-speedometer2"></i> Admin</h4>
+    <a href="#dashboard" class="tab-link active" data-tab="dashboard">Dashboard</a>
+    <a href="#products" class="tab-link" data-tab="products">Products</a>
+    <a href="#categories" class="tab-link" data-tab="categories">Categories</a>
+    <a href="#inventory" class="tab-link" data-tab="inventory">Inventory</a>
+    <a href="#orders" class="tab-link" data-tab="orders">Orders</a>
+    <a href="#users" class="tab-link" data-tab="users">Users</a>
+    <hr class="border-secondary">
+    <a href="/index.html">Back to Store</a>
+  </aside>
+  <main class="flex-grow-1 p-4" id="main">
+    <div id="dashboard" class="tab-panel">
+      <h3>Dashboard</h3>
+      <div class="row g-3 mt-2" id="stats"></div>
+    </div>
+    <div id="products" class="tab-panel d-none">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3>Products</h3>
+        <button class="btn btn-primary" id="addProductBtn"><i class="bi bi-plus"></i> Add Product</button>
+      </div>
+      <div class="table-responsive mt-3"><table class="table table-sm"><thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Featured</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div>
+    </div>
+    <div id="categories" class="tab-panel d-none">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3>Categories</h3>
+        <button class="btn btn-primary" id="addCatBtn"><i class="bi bi-plus"></i> Add Category</button>
+      </div>
+      <div class="table-responsive mt-3"><table class="table table-sm"><thead><tr><th>ID</th><th>Name</th><th>Description</th><th></th></tr></thead><tbody id="catRows"></tbody></table></div>
+    </div>
+    <div id="inventory" class="tab-panel d-none">
+      <h3>Inventory</h3>
+      <div class="table-responsive mt-3"><table class="table table-sm"><thead><tr><th>Product</th><th>Stock</th><th>Update</th></tr></thead><tbody id="invRows"></tbody></table></div>
+    </div>
+    <div id="orders" class="tab-panel d-none">
+      <h3>Orders</h3>
+      <div class="table-responsive mt-3"><table class="table table-sm"><thead><tr><th>ID</th><th>User</th><th>Status</th><th>Total</th><th>Date</th><th></th></tr></thead><tbody id="orderRows"></tbody></table></div>
+    </div>
+    <div id="users" class="tab-panel d-none">
+      <h3>Users</h3>
+      <div class="table-responsive mt-3"><table class="table table-sm"><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th></th></tr></thead><tbody id="userRows"></tbody></table></div>
+    </div>
+  </main>
+</div>
+
+<!-- Product Modal -->
+<div class="modal fade" id="productModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
+  <div class="modal-header"><h5 class="modal-title" id="productModalTitle">Product</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body">
+    <form id="productForm">
+      <input type="hidden" id="pId">
+      <div class="mb-2"><label class="form-label">Name</label><input class="form-control" id="pName" required></div>
+      <div class="mb-2"><label class="form-label">Description</label><textarea class="form-control" id="pDesc" rows="2"></textarea></div>
+      <div class="row">
+        <div class="col mb-2"><label class="form-label">Price</label><input type="number" step="0.01" class="form-control" id="pPrice" required></div>
+        <div class="col mb-2"><label class="form-label">Stock</label><input type="number" class="form-control" id="pStock" required></div>
+      </div>
+      <div class="mb-2"><label class="form-label">Image URL</label><input class="form-control" id="pImg" placeholder="/images/product-placeholder.svg"></div>
+      <div class="mb-2"><label class="form-label">Category</label><select class="form-select" id="pCat"></select></div>
+      <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="pFeatured"><label class="form-check-label">Featured</label></div>
+    </form>
+  </div>
+  <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-primary" id="saveProductBtn">Save</button></div>
+</div></div></div>
+
+<!-- Category Modal -->
+<div class="modal fade" id="catModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content">
+  <div class="modal-header"><h5 class="modal-title">Category</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body">
+    <form id="catForm">
+      <input type="hidden" id="cId">
+      <div class="mb-2"><label class="form-label">Name</label><input class="form-control" id="cName" required></div>
+      <div class="mb-2"><label class="form-label">Description</label><textarea class="form-control" id="cDesc" rows="2"></textarea></div>
+    </form>
+  </div>
+  <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-primary" id="saveCatBtn">Save</button></div>
+</div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/api.js"></script>
+<script>
+if (!getToken() || !isAdmin()) { window.location.href = '/login.html'; }
+const productModal = new bootstrap.Modal(document.getElementById('productModal'));
+const catModal = new bootstrap.Modal(document.getElementById('catModal'));
+
+document.querySelectorAll('.tab-link').forEach(a => {
+  a.onclick = (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.tab-link').forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
+    const t = a.dataset.tab;
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('d-none'));
+    document.getElementById(t).classList.remove('d-none');
+    loadTab(t);
+  };
+});
+let currentTab = 'dashboard';
+function loadTab(t) { currentTab = t; if (t==='dashboard') loadDashboard(); if (t==='products') loadProducts(); if (t==='categories') loadCategories(); if (t==='inventory') loadInventory(); if (t==='orders') loadOrders(); if (t==='users') loadUsers(); }
+function statusBadge(s){const m={PENDING:'warning',CONFIRMED:'info',SHIPPED:'primary',DELIVERED:'success',CANCELLED:'danger'};return `<span class="badge text-bg-${m[s]||'secondary'}">${s}</span>`;}
+
+async function loadDashboard() {
+  const [products, categories, users, orders] = await Promise.all([
+    api.get('/api/products?page=0&size=1000'),
+    api.get('/api/categories'),
+    api.get('/api/users'),
+    api.get('/api/orders/admin/all?page=0&size=1000')
+  ]);
+  document.getElementById('stats').innerHTML = `
+    <div class="col-md-3"><div class="card stat-card p-3"><h6>Products</h6><h2>${products.totalElements||products.content.length}</h2></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h6>Categories</h6><h2>${categories.length}</h2></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h6>Users</h6><h2>${users.length}</h2></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h6>Orders</h6><h2>${orders.totalElements||orders.content.length}</h2></div></div>`;
+}
+
+async function loadProducts() {
+  const data = await api.get('/api/products?page=0&size=1000');
+  const cats = await api.get('/api/categories');
+  document.getElementById('productRows').innerHTML = (data.content||[]).map(p => `<tr>
+    <td>${p.id}</td><td>${p.name}</td><td>${p.categoryName||''}</td><td>${money(p.price)}</td><td>${p.stock}</td><td>${p.featured?'Yes':''}</td>
+    <td><button class="btn btn-sm btn-outline-primary editP" data-id="${p.id}">Edit</button>
+        <button class="btn btn-sm btn-outline-danger delP" data-id="${p.id}">Del</button></td>
+  </tr>`).join('');
+  // populate cat select
+  const sel = document.getElementById('pCat');
+  sel.innerHTML = cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('') + '<option value="">None</option>';
+  // store products for edit
+  window._products = data.content || [];
+  document.querySelectorAll('.editP').forEach(b => b.onclick = () => {
+    const p = window._products.find(x => x.id == b.dataset.id);
+    document.getElementById('pId').value = p.id;
+    document.getElementById('pName').value = p.name;
+    document.getElementById('pDesc').value = p.description || '';
+    document.getElementById('pPrice').value = p.price;
+    document.getElementById('pStock').value = p.stock;
+    document.getElementById('pImg').value = p.imageUrl || '';
+    document.getElementById('pCat').value = p.categoryId || '';
+    document.getElementById('pFeatured').checked = p.featured;
+    document.getElementById('productModalTitle').textContent = 'Edit Product';
+    productModal.show();
+  });
+  document.querySelectorAll('.delP').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete product?')) return;
+    try { await api.del('/api/products/' + b.dataset.id); showToast('Deleted'); loadProducts(); }
+    catch(e){ showToast(e.message,'error'); }
+  });
+}
+document.getElementById('addProductBtn').onclick = () => {
+  document.getElementById('productForm').reset();
+  document.getElementById('pId').value = '';
+  document.getElementById('productModalTitle').textContent = 'Add Product';
+  productModal.show();
+};
+document.getElementById('saveProductBtn').onclick = async () => {
+  const id = document.getElementById('pId').value;
+  const body = {
+    name: document.getElementById('pName').value,
+    description: document.getElementById('pDesc').value,
+    price: parseFloat(document.getElementById('pPrice').value),
+    stock: parseInt(document.getElementById('pStock').value,10),
+    imageUrl: document.getElementById('pImg').value,
+    categoryId: document.getElementById('pCat').value ? +document.getElementById('pCat').value : null,
+    featured: document.getElementById('pFeatured').checked
+  };
+  try {
+    if (id) await api.put('/api/products/' + id, body);
+    else await api.post('/api/products', body);
+    productModal.hide(); showToast('Saved'); loadProducts();
+  } catch(e){ showToast(e.message,'error'); }
+};
+
+async function loadCategories() {
+  const cats = await api.get('/api/categories');
+  document.getElementById('catRows').innerHTML = cats.map(c => `<tr>
+    <td>${c.id}</td><td>${c.name}</td><td>${c.description||''}</td>
+    <td><button class="btn btn-sm btn-outline-primary editC" data-id="${c.id}">Edit</button>
+        <button class="btn btn-sm btn-outline-danger delC" data-id="${c.id}">Del</button></td>
+  </tr>`).join('');
+  window._cats = cats;
+  document.querySelectorAll('.editC').forEach(b => b.onclick = () => {
+    const c = window._cats.find(x => x.id == b.dataset.id);
+    document.getElementById('cId').value = c.id;
+    document.getElementById('cName').value = c.name;
+    document.getElementById('cDesc').value = c.description || '';
+    catModal.show();
+  });
+  document.querySelectorAll('.delC').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete category?')) return;
+    try { await api.del('/api/categories/' + b.dataset.id); showToast('Deleted'); loadCategories(); }
+    catch(e){ showToast(e.message,'error'); }
+  });
+}
+document.getElementById('addCatBtn').onclick = () => {
+  document.getElementById('catForm').reset();
+  document.getElementById('cId').value = '';
+  catModal.show();
+};
+document.getElementById('saveCatBtn').onclick = async () => {
+  const id = document.getElementById('cId').value;
+  const body = { name: document.getElementById('cName').value, description: document.getElementById('cDesc').value };
+  try {
+    if (id) await api.put('/api/categories/' + id, body);
+    else await api.post('/api/categories', body);
+    catModal.hide(); showToast('Saved'); loadCategories();
+  } catch(e){ showToast(e.message,'error'); }
+};
+
+async function loadInventory() {
+  const data = await api.get('/api/products?page=0&size=1000');
+  document.getElementById('invRows').innerHTML = (data.content||[]).map(p => `<tr>
+    <td>${p.name}</td>
+    <td>${p.stock}</td>
+    <td><div class="d-flex gap-2"><input type="number" min="0" value="${p.stock}" class="form-control form-control-sm" style="width:90px" data-id="${p.id}">
+    <button class="btn btn-sm btn-primary updStock" data-id="${p.id}">Update</button></div></td>
+  </tr>`).join('');
+  document.querySelectorAll('.updStock').forEach(b => b.onclick = async () => {
+    const inp = document.querySelector(`input[data-id="${b.dataset.id}"]`);
+    try { await api.put('/api/products/' + b.dataset.id + '/stock?stock=' + inp.value, {}); showToast('Stock updated'); loadInventory(); }
+    catch(e){ showToast(e.message,'error'); }
+  });
+}
+
+async function loadOrders() {
+  const data = await api.get('/api/orders/admin/all?page=0&size=1000');
+  document.getElementById('orderRows').innerHTML = (data.content||[]).map(o => `<tr>
+    <td>${o.id}</td><td>${o.userEmail}</td><td>${statusBadge(o.status)}</td><td>${money(o.totalAmount)}</td><td>${new Date(o.createdAt).toLocaleString()}</td>
+    <td><select class="form-select form-select-sm" data-id="${o.id}">
+      ${['PENDING','CONFIRMED','SHIPPED','DELIVERED','CANCELLED'].map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}
+    </select></td>
+  </tr>`).join('');
+  document.querySelectorAll('select[data-id]').forEach(sel => {
+    sel.onchange = async () => {
+      try { await api.put('/api/orders/admin/' + sel.dataset.id + '/status', { status: sel.value }); showToast('Status updated'); }
+      catch(e){ showToast(e.message,'error'); }
+    };
+  });
+}
+
+async function loadUsers() {
+  const users = await api.get('/api/users');
+  document.getElementById('userRows').innerHTML = users.map(u => `<tr>
+    <td>${u.id}</td><td>${u.fullName}</td><td>${u.email}</td><td>${u.role}</td>
+    <td><button class="btn btn-sm btn-outline-danger delU" data-id="${u.id}">Del</button></td>
+  </tr>`).join('');
+  document.querySelectorAll('.delU').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete user?')) return;
+    try { await api.del('/api/users/' + b.dataset.id); showToast('Deleted'); loadUsers(); }
+    catch(e){ showToast(e.message,'error'); }
+  });
+}
+
+loadTab('dashboard');
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --secondary: #f59e0b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --danger: #ef4444;
+  --success: #10b981;
+}
+* { box-sizing: border-box; }
+body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+.navbar { background: linear-gradient(90deg, #1e3a8a, #2563eb); }
+.navbar-brand { font-weight: 800; letter-spacing: .5px; }
+.card { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: transform .18s ease, box-shadow .18s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(37,99,235,.12); }
+.product-img { width: 100%; height: 200px; object-fit: cover; background: #eef2ff; }
+.btn-primary { background: var(--primary); border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+.hero { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #60a5fa 100%); color: #fff; padding: 4rem 0; }
+.hero h1 { font-weight: 800; }
+.price { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+.badge-featured { background: var(--secondary); color: #fff; }
+.sidebar-card { position: sticky; top: 1rem; }
+.footer { background: #0f172a; color: #cbd5e1; padding: 2rem 0; margin-top: 3rem; }
+.form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 .2rem rgba(37,99,235,.15); }
+.table thead { background: #f1f5f9; }
+.spinner-border-sm { width: 1rem; height: 1rem; }
+.toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 1080; }
+.admin-sidebar { min-height: 100vh; background: #0f172a; }
+.admin-sidebar a { color: #cbd5e1; text-decoration: none; padding: .75rem 1rem; display: block; border-radius: 8px; margin-bottom: .25rem; }
+.admin-sidebar a:hover, .admin-sidebar a.active { background: #1e293b; color: #fff; }
+.stat-card { border-radius: 14px; }
+@media (max-width: 768px) {
+  .hero { padding: 2rem 0; }
+  .product-img { height: 160px; }
+}
