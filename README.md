@@ -95,6 +95,48 @@ Tests use an in-memory H2 database (profile `test`).
 - Build a jar: `mvn package` then `java -jar target/ecommerce-site-1.0.0.jar`
 - Place behind HTTPS reverse proxy.
 
+## Public Deployment (Manual Cloud Steps)
+
+A `Dockerfile` is included for cloud hosting providers that support Java containers (Render, Railway, Fly.io, or similar).
+
+### 1. Prepare GitHub repository
+1. Do not commit `.env.local`, `.env`, or `.neon` (they are ignored).
+2. Commit source code, `pom.xml`, frontend files, and the `Dockerfile`.
+3. Push the repository to GitHub.
+
+### 2. Create hosting account and project
+1. Create an account with a provider that supports Docker/Java 17 (Render is beginner-friendly).
+2. Choose "New Web Service" (or equivalent) and connect your GitHub repository.
+3. Select the free tier if available.
+
+### 3. Configure environment variables
+Add these on the host:
+
+- `DATABASE_URL`: pooled Neon Postgres URL from your Neon project.
+- `JWT_SECRET`: a long random secret.
+- `SERVER_PORT`: keep `8080` (or use the value required by your provider).
+- `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME`: your admin credentials.
+- Optional: `JWT_EXPIRATION_MS`.
+
+### 4. Build/start settings
+- Build command: `mvn -DskipTests package`
+- Start command: `java -jar target/ecommerce-site-1.0.0.jar`
+- Or use the included `Dockerfile`.
+- Health check path: `/actuator/health`
+
+### 5. Get the public URL
+After deployment succeeds, open the generated HTTPS URL, then test:
+- `/`
+- Product images
+- `/actuator/health`
+- Cart and demo checkout
+
+### Current Verification Status
+- Local server verified at `http://localhost:8080`.
+- Local `/actuator/health` returns `UP`.
+- Product catalog verified with 54 products.
+- Product SVG images verified with HTTP 200.
+- Public HTTPS URL has not been claimed because cloud account access is not available from this environment. Follow the steps above to publish.
 ## License
 
 MIT

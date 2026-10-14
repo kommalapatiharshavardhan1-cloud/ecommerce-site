@@ -23,9 +23,12 @@ public class ProductController {
     public ResponseEntity<Page<ProductResponse>> list(
             @RequestParam(required = false) String q,
             @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) java.math.BigDecimal minPrice,
+            @RequestParam(required = false) java.math.BigDecimal maxPrice,
+            @RequestParam(required = false) String sort,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size) {
-        return ResponseEntity.ok(productService.search(q, categoryId, page, size));
+        return ResponseEntity.ok(productService.search(q, categoryId, minPrice, maxPrice, sort, page, size));
     }
 
     @GetMapping("/{id}")

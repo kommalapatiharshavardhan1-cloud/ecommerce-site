@@ -42,6 +42,10 @@ public class Product {
 
     private boolean featured = false;
 
+    private Double rating;
+
+    private Integer reviewCount = 0;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -67,6 +71,10 @@ public class Product {
     public void setCategory(Category category) { this.category = category; }
     public boolean isFeatured() { return featured; }
     public void setFeatured(boolean featured) { this.featured = featured; }
+    public Double getRating() { return rating; }
+    public void setRating(Double rating) { this.rating = rating; }
+    public Integer getReviewCount() { return reviewCount; }
+    public void setReviewCount(Integer reviewCount) { this.reviewCount = reviewCount; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

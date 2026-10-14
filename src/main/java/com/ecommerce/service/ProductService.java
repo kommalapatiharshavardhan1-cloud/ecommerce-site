@@ -13,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 @Transactional
 public class ProductService {
@@ -26,9 +28,19 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponse> search(String query, Long categoryId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return productRepository.search(query, categoryId, pageable).map(this::toResponse);
+    public Page<ProductResponse> search(String query, Long categoryId, BigDecimal minPrice, BigDecimal maxPrice, String sort, int page, int size) {
+        Sort sortObj = Sort.by("createdAt").descending();
+        if ("price_asc".equalsIgnoreCase(sort)) {
+            sortObj = Sort.by("price").ascending();
+        } else if ("price_desc".equalsIgnoreCase(sort)) {
+            sortObj = Sort.by("price").descending();
+        } else if ("rating".equalsIgnoreCase(sort)) {
+            sortObj = Sort.by("rating").descending();
+        } else if ("name".equalsIgnoreCase(sort)) {
+            sortObj = Sort.by("name").ascending();
+        }
+        Pageable pageable = PageRequest.of(page, size, sortObj);
+        return productRepository.search(query, categoryId, minPrice, maxPrice, pageable).map(this::toResponse);
     }
 
     @Transactional(readOnly = true)
@@ -77,6 +89,8 @@ public class ProductService {
         p.setImageUrl(req.getImageUrl());
         p.setStock(req.getStock() == null ? 0 : req.getStock());
         p.setFeatured(req.isFeatured());
+        p.setRating(req.getRating());
+        p.setReviewCount(req.getReviewCount() == null ? 0 : req.getReviewCount());
         if (req.getCategoryId() != null) {
             Category c = categoryService.getEntity(req.getCategoryId());
             p.setCategory(c);
@@ -94,6 +108,8 @@ public class ProductService {
         r.setImageUrl(p.getImageUrl());
         r.setStock(p.getStock());
         r.setFeatured(p.isFeatured());
+        r.setRating(p.getRating());
+        r.setReviewCount(p.getReviewCount());
         if (p.getCategory() != null) {
             r.setCategoryId(p.getCategory().getId());
             r.setCategoryName(p.getCategory().getName());

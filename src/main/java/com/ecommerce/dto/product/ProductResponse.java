@@ -12,6 +12,8 @@ public class ProductResponse {
     private Long categoryId;
     private String categoryName;
     private boolean featured;
+    private Double rating;
+    private Integer reviewCount;
 
     public ProductResponse() {}
     public Long getId() { return id; }
@@ -32,4 +34,8 @@ public class ProductResponse {
     public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
     public boolean isFeatured() { return featured; }
     public void setFeatured(boolean featured) { this.featured = featured; }
+    public Double getRating() { return rating; }
+    public void setRating(Double rating) { this.rating = rating; }
+    public Integer getReviewCount() { return reviewCount; }
+    public void setReviewCount(Integer reviewCount) { this.reviewCount = reviewCount; }
 }

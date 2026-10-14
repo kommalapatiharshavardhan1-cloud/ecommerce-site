@@ -63,7 +63,7 @@ public class OrderService {
         order.setPhone(req.getPhone());
         order.setStatus(OrderStatus.PENDING);
 
-        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal subtotal = BigDecimal.ZERO;
         for (CartItem ci : cartItems) {
             OrderItem oi = new OrderItem();
             oi.setOrder(order);
@@ -71,11 +71,17 @@ public class OrderService {
             oi.setQuantity(ci.getQuantity());
             oi.setPrice(ci.getProduct().getPrice());
             order.getItems().add(oi);
-            total = total.add(ci.getProduct().getPrice().multiply(BigDecimal.valueOf(ci.getQuantity())));
+            subtotal = subtotal.add(ci.getProduct().getPrice().multiply(BigDecimal.valueOf(ci.getQuantity())));
 
             int newStock = ci.getProduct().getStock() - ci.getQuantity();
             productService.updateStock(ci.getProduct().getId(), newStock);
         }
+
+        // Shipping policy: free above Rs 499, otherwise a nominal shipping charge.
+        BigDecimal shipping = subtotal.compareTo(new BigDecimal("499")) >= 0
+                ? BigDecimal.ZERO
+                : new BigDecimal("49.00");
+        BigDecimal total = subtotal.add(shipping);
 
         order.setTotalAmount(total);
         Order saved = orderRepository.save(order);

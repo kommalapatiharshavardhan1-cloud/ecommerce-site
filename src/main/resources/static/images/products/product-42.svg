@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" role="img" aria-label="Bata Formal Shoes">
+  <defs>
+    <linearGradient id="g42" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#78350f" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#g42)" />
+  <circle cx="200" cy="115" r="74" fill="rgba(255,255,255,0.20)" />
+  <text x="200" y="145" text-anchor="middle" font-size="64" font-family="Arial" fill="#ffffff" font-weight="700">P42</text>
+  <rect x="48" y="218" width="304" height="46" rx="14" fill="rgba(255,255,255,0.22)" />
+  <text x="200" y="248" text-anchor="middle" font-size="18" font-family="Segoe UI, Arial, sans-serif" fill="#ffffff" font-weight="700">Bata Formal Shoes</text>
+</svg>

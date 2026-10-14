@@ -90,6 +90,10 @@ function requireAuth() {
   return true;
 }
 
-function money(n) { return '$' + Number(n).toFixed(2); }
+function money(n) {
+  var value = Number(n);
+  if (isNaN(value)) value = 0;
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value);
+}
 
 document.addEventListener('DOMContentLoaded', updateNavUser);

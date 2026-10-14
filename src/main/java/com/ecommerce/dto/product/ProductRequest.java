@@ -18,6 +18,9 @@ public class ProductRequest {
     private Integer stock = 0;
     private Long categoryId;
     private boolean featured = false;
+    private Double rating;
+    @Min(0)
+    private Integer reviewCount = 0;
 
     public ProductRequest() {}
     public String getName() { return name; }
@@ -34,4 +37,8 @@ public class ProductRequest {
     public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
     public boolean isFeatured() { return featured; }
     public void setFeatured(boolean featured) { this.featured = featured; }
+    public Double getRating() { return rating; }
+    public void setRating(Double rating) { this.rating = rating; }
+    public Integer getReviewCount() { return reviewCount; }
+    public void setReviewCount(Integer reviewCount) { this.reviewCount = reviewCount; }
 }
